@@ -6,7 +6,8 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{titlesec}
-\usepackage{graphicx} % Required for including images
+\usepackage{graphicx} 
+\usepackage{float} % REQUIRED to use [H] for fixing image positions
 
 \geometry{a4paper, margin=1in}
 
@@ -56,15 +57,15 @@ where $P(Y=y)$ is the prior probability (calculated as the frequency of the clas
 \subsection{Task 1: Synthetic Binary Dataset}
 Using 1000 samples and 2 features, the model performed effectively with an accuracy of approximately 90-93\%.
 
-\begin{figure}[ht!]
+\begin{figure}[H] % [H] forces the image to stay HERE
     \centering
-    \includegraphics[width=0.7\textwidth]{"Task 1: Synthetic Data - Decision Boundary"}
+    \includegraphics[width=0.7\textwidth]{"Task 1: Synthetic Data - Decision Boundary.png"}
     \caption{Decision Boundary for Synthetic Binary Classification}
 \end{figure}
 
-\begin{figure}[ht!]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{"Synthetic Data - Confusion Matrix.png"}
+    \includegraphics[width=0.5\textwidth]{"Task 1: Synthetic Data - Confusion Matrix.png"}
     \caption{Confusion Matrix for Synthetic Data}
 \end{figure}
 
@@ -74,18 +75,18 @@ Using 1000 samples and 2 features, the model performed effectively with an accur
     \item \textbf{Scenario B (All 4 Features):} Performance jumped to nearly 100\%. It seems petal dimensions provide higher information for the model to be able to discriminate more between the classes. Since it often predicts with 100\% accuracy (see figure 3 and 4), it could mean the model is overfit and i expect it to perform worse on unseen data.
 \end{itemize}
 
-\begin{figure}[ht!]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{"Task 3A: Iris (2 Features) - Descision boundary"}
+    \includegraphics[width=0.7\textwidth]{"Task 3A: Iris (2 Features) - Descision boundary.png"}
     \caption{Iris Decision Boundary (Sepal Features)}
 \end{figure}
 
-\begin{figure}[ht!]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{"Task 3B: Iris (Full Features)"}
+    \includegraphics[width=0.5\textwidth]{"Task 3B: Iris (Full Features).png"}
     \caption{Confusion Matrix for Full Iris Dataset (4 Features)}
 \end{figure}
-\newpage
+
 \section{Challenges and Solutions}
 \textbf{Numerical Stability:} I followed the instructions and used the direct product, but it’s risky because multiplying all those tiny decimals can lead to underflow. Usually, you’d just sum the logs to keep the math stable, especially with bigger datasets.
 
