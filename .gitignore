@@ -5,6 +5,14 @@ build/
 dist/
 wheels/
 *.egg-info
-
+.ipynb_checkpoints/
 # Virtual environments
 .venv
+
+*.aux
+*.log
+*.out
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
