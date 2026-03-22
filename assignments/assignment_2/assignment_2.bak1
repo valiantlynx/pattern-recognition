@@ -22,15 +22,15 @@
 
 % --- TITLE ---
 \begin{titlepage}
-	\centering
-	\vspace*{2cm}
-	\Huge\textbf{IKT215 Assignment 2: \\ Parametric and Non-parametric Classification} \\
-	\vspace{1.5cm}
-	\Large \textbf{Student:} Gomery K. Wanjiru \\
-	\Large \textbf{Course:} IKT215 \\
-	\vfill
-	\section*{Disclaimer on Generative AI}
-	In accordance with UiA's guidelines, I declare that I used Generative AI (Different across the research process) to assist in structuring the LaTeX report and generating some of the boilerplate plotting code. The QDA and kNN implementations, the feature selection reasoning, and the analysis of results are my own work.
+    \centering
+    \vspace*{2cm}
+    \Huge\textbf{IKT215 Assignment 2: \\ Parametric and Non-parametric Classification} \\
+    \vspace{1.5cm}
+    \Large \textbf{Student:} Gomery K. Wanjiru \\
+    \Large \textbf{Course:} IKT215 \\
+    \vfill
+    \section*{Disclaimer on Generative AI}
+    In accordance with UiA's guidelines, I declare that I used Generative AI (Different ones accross the project) to assist in structuring the LaTeX report and generating some of the boilerplate plotting code. The QDA and kNN implementations, the feature selection reasoning, and the analysis of results are my own work.
 \end{titlepage}
 
 \newpage
@@ -42,15 +42,15 @@ I used the combined red and white wine datasets (6497 samples, 1599 red + 4898 w
 \section{Feature Selection (shared by both tasks)}
 I picked 4 features: \textbf{alcohol}, \textbf{volatile acidity}, \textbf{sulphates}, and \textbf{citric acid}. Two reasons:
 \begin{enumerate}
-	\item \textbf{Correlation with quality:} Alcohol has the strongest correlation ($|r| = 0.44$), followed by volatile acidity ($|r| = 0.27$). Density also correlates well ($|r| = 0.31$), but it is highly correlated with alcohol ($r = -0.69$), so including both would be redundant.
-	\item \textbf{Low inter-feature correlation:} The selected features have low pairwise correlations (highest: volatile acidity vs citric acid at $|r| = 0.38$), so they each bring relatively independent information.
+    \item \textbf{Correlation with quality:} Alcohol has the strongest correlation ($|r| = 0.44$), followed by volatile acidity ($|r| = 0.27$). Density also correlates well ($|r| = 0.31$), but it is highly correlated with alcohol ($r = -0.69$), so including both would be redundant.
+    \item \textbf{Low inter-feature correlation:} The selected features have low pairwise correlations (highest: volatile acidity vs citric acid at $|r| = 0.38$), so they each bring relatively independent information.
 \end{enumerate}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.78\textwidth]{feature_distributions.png}
-	\caption{Feature distributions by class. Volatile acidity shows the clearest separation.}
-	\label{fig:feat_dist}
+    \centering
+    \includegraphics[width=0.78\textwidth]{feature_distributions.png}
+    \caption{Feature distributions by class. Volatile acidity shows the clearest separation.}
+    \label{fig:feat_dist}
 \end{figure}
 
 \section{Task 1: Quadratic Discriminant Analysis}
@@ -62,41 +62,41 @@ QDA assumes each class follows a multivariate Gaussian with its own mean and cov
 
 \textbf{MLE Mean Vectors} (features in order: alcohol, volatile acidity, sulphates, citric acid):
 \[
-	\hat{\boldsymbol{\mu}}_{\text{bad}} = (10.15,\ 0.459,\ 0.509,\ 0.273)^T, \quad
-	\hat{\boldsymbol{\mu}}_{\text{good}} = (10.50,\ 0.336,\ 0.534,\ 0.320)^T
+\hat{\boldsymbol{\mu}}_{\text{bad}} = (10.15,\ 0.459,\ 0.509,\ 0.273)^T, \quad
+\hat{\boldsymbol{\mu}}_{\text{good}} = (10.50,\ 0.336,\ 0.534,\ 0.320)^T
 \]
 
 \textbf{MLE Covariance Matrices} (using $\frac{1}{N}$ normalization):
 \[
-	\hat{\Sigma}_{\text{bad}} = \begin{pmatrix}
-		0.990  & 0.008  & -0.013 & -0.018 \\
-		0.008  & 0.059  & 0.004  & -0.019 \\
-		-0.013 & 0.004  & 0.027  & 0.007  \\
-		-0.018 & -0.019 & 0.007  & 0.032
-	\end{pmatrix}, \quad
-	\hat{\Sigma}_{\text{good}} = \begin{pmatrix}
-		1.433  & -0.008 & -0.004 & -0.004 \\
-		-0.008 & 0.025  & 0.006  & -0.008 \\
-		-0.004 & 0.006  & 0.023  & 0.001  \\
-		-0.004 & -0.008 & 0.001  & 0.020
-	\end{pmatrix}
+\hat{\Sigma}_{\text{bad}} = \begin{pmatrix}
+0.990 & 0.008 & -0.013 & -0.018 \\
+0.008 & 0.059 & 0.004 & -0.019 \\
+-0.013 & 0.004 & 0.027 & 0.007 \\
+-0.018 & -0.019 & 0.007 & 0.032
+\end{pmatrix}, \quad
+\hat{\Sigma}_{\text{good}} = \begin{pmatrix}
+1.433 & -0.008 & -0.004 & -0.004 \\
+-0.008 & 0.025 & 0.006 & -0.008 \\
+-0.004 & 0.006 & 0.023 & 0.001 \\
+-0.004 & -0.008 & 0.001 & 0.020
+\end{pmatrix}
 \]
 The covariance matrices are clearly different (e.g., alcohol variance is 0.99 for bad vs 1.43 for good), which is why QDA is more appropriate here than LDA.
 
 \subsection{Classifier Definition}
 The QDA discriminant function for class $c$ is:
 \begin{equation}
-	g_c(\mathbf{x}) = -\frac{1}{2} \ln|\hat{\Sigma}_c| - \frac{1}{2}(\mathbf{x} - \hat{\boldsymbol{\mu}}_c)^T \hat{\Sigma}_c^{-1} (\mathbf{x} - \hat{\boldsymbol{\mu}}_c) + \ln P(c)
+g_c(\mathbf{x}) = -\frac{1}{2} \ln|\hat{\Sigma}_c| - \frac{1}{2}(\mathbf{x} - \hat{\boldsymbol{\mu}}_c)^T \hat{\Sigma}_c^{-1} (\mathbf{x} - \hat{\boldsymbol{\mu}}_c) + \ln P(c)
 \end{equation}
 The classifier assigns the class with the highest discriminant score.
 
 \subsection{Performance Evaluation}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.38\textwidth]{qda_confusion_matrix.png}
-	\caption{QDA confusion matrix. It catches 9 out of 51 bad wines.}
-	\label{fig:qda_cm}
+    \centering
+    \includegraphics[width=0.38\textwidth]{qda_confusion_matrix.png}
+    \caption{QDA confusion matrix. It catches 9 out of 51 bad wines.}
+    \label{fig:qda_cm}
 \end{figure}
 
 QDA achieved \textbf{95.62\%} overall accuracy, but this is misleading. Looking at per-class metrics: the classifier only catches 18\% of the bad wines (recall = 0.18), and when it does predict ``bad'', it is only right 38\% of the time (precision = 0.38). It is basically good at the majority class but struggles with the minority. This is a direct consequence of the heavy class imbalance and the strong prior toward ``good''.
@@ -112,19 +112,19 @@ I used \textbf{Euclidean distance}: $d(\mathbf{x}, \mathbf{x}') = \sqrt{\sum_{i}
 For $k$, I tested values from 1 to 31 (Figure~\ref{fig:knn_k}). I went with $k = 5$ because accuracy stabilizes around $k = 5$--7. Smaller values like $k = 1$ are prone to overfitting, and going much higher makes the classifier default to the majority class even more.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.55\textwidth]{knn_k_selection.png}
-	\caption{kNN accuracy for different $k$ values. Stabilizes around $k = 5$.}
-	\label{fig:knn_k}
+    \centering
+    \includegraphics[width=0.55\textwidth]{knn_k_selection.png}
+    \caption{kNN accuracy for different $k$ values. Stabilizes around $k = 5$.}
+    \label{fig:knn_k}
 \end{figure}
 
 \subsection{Performance Evaluation}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.38\textwidth]{knn_confusion_matrix.png}
-	\caption{kNN ($k=5$) confusion matrix. Only catches 3 out of 51 bad wines.}
-	\label{fig:knn_cm}
+    \centering
+    \includegraphics[width=0.38\textwidth]{knn_confusion_matrix.png}
+    \caption{kNN ($k=5$) confusion matrix. Only catches 3 out of 51 bad wines.}
+    \label{fig:knn_cm}
 \end{figure}
 
 kNN achieved \textbf{96.00\%} accuracy --- slightly higher than QDA in raw numbers, but actually worse at detecting bad wines (recall = 0.06 vs QDA's 0.18).
@@ -132,32 +132,32 @@ kNN achieved \textbf{96.00\%} accuracy --- slightly higher than QDA in raw numbe
 \subsection{Comparison: QDA vs kNN}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.78\textwidth]{comparison_bar.png}
-	\caption{Side-by-side performance comparison. QDA has better minority class recall.}
-	\label{fig:comparison}
+    \centering
+    \includegraphics[width=0.78\textwidth]{comparison_bar.png}
+    \caption{Side-by-side performance comparison. QDA has better minority class recall.}
+    \label{fig:comparison}
 \end{figure}
 
 \begin{table}[H]
-	\centering
-	\caption{Summary comparison of QDA and kNN.}
-	\begin{tabular}{lcc}
-		\toprule
-		Metric                       & QDA                & kNN ($k=5$)        \\
-		\midrule
-		Overall Accuracy             & 0.9562             & 0.9600             \\
-		Bad Precision / Recall / F1  & 0.38 / 0.18 / 0.24 & 0.43 / 0.06 / 0.10 \\
-		Good Precision / Recall / F1 & 0.97 / 0.99 / 0.98 & 0.96 / 1.00 / 0.98 \\
-		\bottomrule
-	\end{tabular}
-	\label{tab:comparison}
+\centering
+\caption{Summary comparison of QDA and kNN.}
+\begin{tabular}{lcc}
+\toprule
+Metric & QDA & kNN ($k=5$) \\
+\midrule
+Overall Accuracy & 0.9562 & 0.9600 \\
+Bad Precision / Recall / F1 & 0.38 / 0.18 / 0.24 & 0.43 / 0.06 / 0.10 \\
+Good Precision / Recall / F1 & 0.97 / 0.99 / 0.98 & 0.96 / 1.00 / 0.98 \\
+\bottomrule
+\end{tabular}
+\label{tab:comparison}
 \end{table}
 
 \textbf{Key observations:}
 \begin{itemize}
-	\item \textbf{QDA is better at detecting bad wines.} Higher recall (0.18 vs 0.06) and F1 (0.24 vs 0.10) for the minority class. This is likely because QDA explicitly models the class distributions and uses the prior, so it captures the structure of the ``bad'' class better.
-	\item \textbf{kNN defaults to the majority class.} Since 96\% of training neighbors are ``good'', most query points get outvoted.
-	\item \textbf{The class imbalance is the elephant in the room.} Neither classifier handles it well. Techniques like oversampling or threshold adjustment would help, but were outside the scope.
+    \item \textbf{QDA is better at detecting bad wines.} Higher recall (0.18 vs 0.06) and F1 (0.24 vs 0.10) for the minority class. This is likely because QDA explicitly models the class distributions and uses the prior, so it captures the structure of the ``bad'' class better.
+    \item \textbf{kNN defaults to the majority class.} Since 96\% of training neighbors are ``good'', most query points get outvoted.
+    \item \textbf{The class imbalance is the elephant in the room.} Neither classifier handles it well. Techniques like oversampling or threshold adjustment would help, but were outside the scope.
 \end{itemize}
 
 \section{Conclusion}
