@@ -16,3 +16,5 @@ wheels/
 *.fls
 *.synctex.gz
 *.toc
+*.bak
+*.bak*
