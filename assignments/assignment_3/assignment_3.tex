@@ -31,7 +31,7 @@
 	\Large \textbf{Course:} IKT215 \\
 	\vfill
 	\section*{Disclaimer on Generative AI}
-	In accordance with UiA's guidelines, I declare that I used Generative AI tools to assist in structuring the LaTeX report and generating boilerplate code for plotting and data loading. The neural network implementation, error estimation analysis, model selection methodology, and interpretation of results are my own work, guided by the course lecture materials (Lectures 6--8) and exercises (7--9).
+	In accordance with UiA's guidelines, I declare that I used Generative AI tools to assist in structuring the LaTeX report and generating boilerplate code for plotting. The neural network implementation, error estimation analysis, model selection methodology, and interpretation of results are my own work, guided by the course lecture materials (Lectures 6--8) and exercises (7--9) + class attendance.
 \end{titlepage}
 
 \newpage
@@ -109,7 +109,7 @@ The model converged within $\sim$105 epochs. Training and validation curves (Fig
 	\label{fig:training_curves}
 \end{figure}
 
-\textbf{Test performance:} The model achieves \textbf{97.75\%} accuracy on the held-out test set (error rate: 2.25\%). Figure~\ref{fig:confusion_matrix} shows the confusion matrix. The most common errors involve digits 1 and 5 (3 misclassifications each), which are visually similar in handwritten form.
+\textbf{Test performance:} The model achieves \textbf{97.75\%} accuracy on the held-out test set (error rate: 2.25\%). Figure~\ref{fig:confusion_matrix} shows the confusion matrix. The most error-prone classes are digit 1 (3 errors: confused with 3 and 7) and digit 5 (3 errors: confused with 3, 4, and 9), which share stroke-level similarities in handwritten form.
 
 \begin{figure}[H]
 	\centering
@@ -124,7 +124,7 @@ I implemented three error estimation techniques using the same network architect
 
 \subsection{Resubstitution Error}
 The classifier is trained on \emph{all} $n = 1600$ training samples and evaluated on the \emph{same} training data (Lecture 7, slide 7):
-$$\hat{\varepsilon}_n^{\text{resub}} = \frac{1}{n} \sum_{i=1}^{n} |Y_i - \psi_n(\mathbf{X}_i)|$$
+$$\Xi_n(\Psi_n, S_n) = \frac{1}{n} \sum_{i=1}^{n} |Y_i - \Psi_n(S_n)(\mathbf{X}_i)|$$
 
 \textbf{Result:} Resubstitution error = \textbf{0.00\%} (accuracy 100\%).
 
@@ -141,7 +141,7 @@ While the hold-out estimator is unbiased given the training data, $E[\hat{\varep
 $$\text{RMS}(\hat{\varepsilon}_{n,m}) \leq \frac{1}{2\sqrt{m}} = \frac{1}{2\sqrt{320}} \approx 2.80\%$$
 This means the hold-out estimate could deviate from the true error by up to 2.80\% in the worst case. The observed deviation is $|0.62\% - 1.75\%| = 1.13\%$, within this bound.
 
-The hold-out error (0.62\%) substantially underestimates the true test error (1.75\%). This gap arises because the hold-out set is drawn from the \emph{same} original collection as the training data. During data collection, all 2000 samples were gathered together, and the train/hold-out split is random within this set. In contrast, the external test set may exhibit slightly different characteristics. Additionally, training on 1280 samples (instead of the full 1600) reduces classifier quality, yet the hold-out set shares the same sampling conditions, making the classifier appear better on this particular split.
+The hold-out error (0.62\%) is noticeably lower than the true test error (1.75\%). One likely reason is that the hold-out set comes from the same pool of 2000 samples as the training data --- so the split is random within one collection, whereas the external test set was provided separately and may capture slightly different variation. On top of that, we only train on 1280 samples here instead of the full 1600, but since the hold-out portion ``looks like'' the training portion, the model ends up appearing better on it than it really is on unseen data.
 
 \textbf{Advantage:} Unbiased conditional on training data; bounded RMS. \textbf{Limitation:} Reduces training data; high variance from a single split; estimate depends on the particular partition chosen.
 
@@ -190,7 +190,7 @@ This is the closest estimate to the true test error (1.75\%). As expected from t
 		\toprule
 		Method           & Error Rate          & Bias Direction       \\
 		\midrule
-		Resubstitution   & 0.00\%              & Optimistic           \\
+		Resubstitution   & 0.00\%              & Severely Optimistic  \\
 		Hold-Out (80/20) & 0.62\%              & Optimistic           \\
 		5-Fold CV        & 2.50\% $\pm$ 0.44\% & Slightly pessimistic \\
 		True Test Error  & 1.75\%              & ---                  \\
@@ -239,7 +239,7 @@ The training data was split into three sets: training (70\%, 1120 samples), vali
 
 Config B was selected with the highest validation accuracy (100\%). The final test accuracy is 97.50\%. However, by the selection probability theorem (Lecture 8, slide 14), the probability of making a wrong selection satisfies:
 $$P\big(\varepsilon(\psi_n) - \varepsilon(\psi_n^*) > \tau\big) \leq 2N e^{-m\tau^2/2}$$
-With $N = 3$ classifiers and $m = 240$ validation samples, for $\tau = 0.01$ (1\% error difference), this gives $P \leq 2 \cdot 3 \cdot e^{-240 \cdot 0.0001/2} = 6 \cdot e^{-0.012} \approx 5.93$, which exceeds 1 and is thus a vacuous bound. This confirms quantitatively that 240 validation samples are insufficient to reliably distinguish models with sub-1\% error differences, explaining why the TVT approach nearly failed to differentiate between configurations.
+Plugging in $N = 3$ classifiers, $m = 240$ validation samples, and $\tau = 0.01$ (a 1\% error difference), we get $P \leq 2 \cdot 3 \cdot e^{-240 \cdot 0.0001/2} = 6 \cdot e^{-0.012} \approx 5.93$. Since this exceeds 1, the bound tells us nothing useful --- 240 samples simply are not enough to reliably tell apart models whose true errors differ by less than 1\%. This lines up with what we observed: the TVT approach could barely distinguish the three configurations.
 
 \subsection{Cross-Validation Approach}
 Each configuration was evaluated using 5-fold cross-validation on the full training set, then the best configuration was retrained on all training data and evaluated on the test set (Lecture 8, slide 18).
@@ -270,7 +270,7 @@ Config C (Large) was selected with the highest mean CV accuracy (98.06\%) and, n
 \subsection{Comparison of Selection Approaches}
 The TVT approach selected Config B (97.50\% test accuracy) while CV selected Config C (97.75\%), demonstrating that CV provided a more discriminating selection. The TVT approach suffered from a validation set too small to distinguish models whose true errors differ by less than 1\%. CV uses all data for evaluation, providing more reliable estimates aligned with the validation error minimization theory (Lecture 8, slide 11--15).
 
-This result also illustrates the \textbf{complexity--sample size tradeoff} (Lecture 8, slides 7--8). The error of a designed classifier decomposes as $\varepsilon_{n,\mathcal{C}} = \varepsilon^* + \Delta_{\mathcal{C}} + \Delta_{n,\mathcal{C}}$, where $\Delta_{\mathcal{C}}$ is the approximation error (smaller for more complex $\mathcal{C}$) and $\Delta_{n,\mathcal{C}}$ is the design error (larger for more complex $\mathcal{C}$ at fixed $n$). With $n = 1600$ samples, Config C's larger classifier space ($|\mathcal{C}|$, 90K parameters) achieves a lower $\Delta_{\mathcal{C}}$ without incurring excessive $\Delta_{n,\mathcal{C}}$, because the strong dropout (0.4) effectively constrains the functional complexity. For a smaller dataset, the simpler Config A would likely be preferred, as the design error would dominate.
+This result also illustrates the \textbf{complexity--sample size tradeoff} (Lecture 8, slides 7--8). The error of a designed classifier decomposes as $\varepsilon_{n,\mathcal{C}} = \varepsilon^* + \Delta_{\mathcal{C}} + \Delta_{n,\mathcal{C}}$, where $\Delta_{\mathcal{C}}$ is the approximation error (smaller for more complex $\mathcal{C}$) and $\Delta_{n,\mathcal{C}}$ is the design error (larger for more complex $\mathcal{C}$ at fixed $n$). With $n = 1600$ samples, Config C's bigger model (90K parameters) brings $\Delta_{\mathcal{C}}$ down without blowing up $\Delta_{n,\mathcal{C}}$, since the strong dropout (0.4) keeps the effective complexity in check. With a smaller dataset, the simpler Config A would probably win out because the design error would start to dominate.
 
 \section{Conclusion}
 A fully connected neural network with ReLU activations, batch normalization, and dropout achieves 97.75\% accuracy on the mfeat-factors 10-class digit classification task. The error estimation experiments confirm that resubstitution is severely optimistically biased (0.00\% vs.\ true 1.75\%), hold-out partially corrects this (0.62\%) but remains optimistic due to single-split limitations, and 5-fold CV provides the most reliable estimate (2.50\%) with slight pessimistic bias from the reduced training set size, as predicted by $E[\hat{\varepsilon}_n] = E[\varepsilon_{n-n/k}]$ (Lecture 7). The quantitative RMS bound of $\leq 2.80\%$ for hold-out with $m=320$ samples confirms that error estimation precision is fundamentally limited by validation set size. For model selection, cross-validation proved more discriminating than train-validation-test splitting: the selection probability theorem shows that TVT's 240-sample validation set yields a vacuous bound, while CV effectively uses all 1600 samples. The selected model (Config C) achieves the best tradeoff in the complexity--sample size decomposition $\varepsilon_{n,\mathcal{C}} = \varepsilon^* + \Delta_{\mathcal{C}} + \Delta_{n,\mathcal{C}}$ (Lecture 8), with higher capacity regularized by stronger dropout.
