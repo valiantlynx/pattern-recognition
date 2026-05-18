@@ -1,0 +1,8 @@
+warning: The workspace `requires-python` value (`==3.12`) contains an exact match without a patch version. When omitted, the patch version is implicitly `0` (e.g., `==3.12.0`). Did you mean `==3.12.*`?
+
+======================================================================
+TASK 2 (GridSearchCV): kNN BENCHMARK
+======================================================================
+  Grid: 28 combinations, 5-fold CV
+  Using all CPU cores (n_jobs=-1)...
+Fitting 5 folds for each of 28 candidates, totalling 140 fits
