@@ -3,7 +3,7 @@ name = "pattern-recognition"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = "==3.12"
 dependencies = [
     "jupyter>=1.1.1",
     "matplotlib>=3.10.8",
@@ -16,7 +16,21 @@ dependencies = [
     "pypdf>=6.10.2",
     "scikit-learn>=1.8.0",
     "seaborn>=0.13.2",
+    "tqdm>=4.67.3",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
 ]
+
+# PyTorch with CUDA support - use the PyTorch index for CUDA builds
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[tool.uv.sources]
+sam3 = { path = "./src/receipt_ocr/sam3" }
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }
 
 [dependency-groups]
 dev = [
