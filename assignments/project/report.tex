@@ -28,7 +28,7 @@
 	\vspace*{2cm}
 	\Huge\textbf{IKT215 Final Project: \\ Fashion MNIST Classification \\ Dense Neural Networks vs. kNN} \\
 	\vspace{1.5cm}
-	\Large \textbf{Student:} Gomery K. Wanjiru \\
+	\Large \textbf{Student:} Gormery K. Wanjiru \\
 	\Large \textbf{Course:} IKT215 -- Pattern Recognition \\
 	\Large \textbf{Date:} May 2026 \\
 	\vfill
@@ -116,13 +116,13 @@ We compare four architectures using validation error minimization (Lecture 8):
 	\label{tab:nn_configs}
 \end{table}
 
-The training data is split 80/20 (stratified). Each model is trained on the 80\% split with early stopping based on validation loss. The model with the highest validation accuracy is selected, then retrained on 90\% of the full training set (with 10\% held out for early stopping only).
+The training data is split 80/20 using stratified sampling, meaning the class proportions are preserved in both the training and validation subsets (e.g., each subset contains exactly 10\% of each clothing class). This prevents the validation set from accidentally over- or under-representing certain classes, which would bias the model selection. Each model is trained on the 80\% split with early stopping based on validation loss. The model with the highest validation accuracy is selected, then retrained on 90\% of the full training set (with 10\% held out for early stopping only).
 
-\textbf{Design rationale}:
+\textbf{Why this design?}:
 \begin{itemize}[nosep]
 	\item Configs A and B use moderate dropout (0.3) with standard learning rate to test whether width alone suffices.
 	\item Configs C and D add depth (3 layers) with stronger dropout (0.4) and lower LR (0.0005) to test if deeper representations with more regularization improve performance.
-	\item Batch size of 256 balances GPU utilization and gradient noise.
+	\item Batch size of 256 is large enough to keep the GPU busy (avoiding idle cycles between batches) while still providing enough gradient noise to help escape local minima during optimization.
 \end{itemize}
 
 \subsection{Evaluation Metrics}
@@ -142,7 +142,7 @@ All models are evaluated on the held-out test set using:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.85\textwidth]{figures/task1_samples.png}
-	\caption{Random samples from each class in the Fashion MNIST training set. The visual similarity between T-shirt/Pullover/Coat/Shirt classes is evident.}
+	\caption{Random samples from each class in the Fashion MNIST training set. The visual similarity between T-shirt/Pullover/Coat/Shirt classes is clear.}
 	\label{fig:samples}
 \end{figure}
 
@@ -174,7 +174,7 @@ All models are evaluated on the held-out test set using:
 Key observations from the EDA:
 \begin{itemize}[nosep]
 	\item The dataset is perfectly balanced, eliminating class imbalance as a confounding factor.
-	\item Several classes are visually similar (T-shirt, Pullover, Coat, Shirt all have similar silhouettes), suggesting they will be harder to distinguish with pixel-level features.
+	\item Several classes are visually similar (T-shirt, Pullover, Coat, Shirt all have similar silhouettes), which later on proved to be harder to distinguish with pixel-level features.
 	\item Footwear classes (Sandal, Sneaker, Ankle boot) and Bag have more distinctive shapes.
 \end{itemize}
 
