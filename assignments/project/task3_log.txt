@@ -1,0 +1,13 @@
+warning: The workspace `requires-python` value (`==3.12`) contains an exact match without a patch version. When omitted, the patch version is implicitly `0` (e.g., `==3.12.0`). Did you mean `==3.12.*`?
+  Evaluating 4 configurations...
+  PCA + kNN:   0%|          | 0/4 [00:00<?, ?it/s]  PCA + kNN:  25%|██▌       | 1/4 [00:14<00:44, 14.68s/it]  PCA + kNN:  50%|█████     | 2/4 [00:33<00:33, 16.83s/it]  PCA + kNN:  75%|███████▌  | 3/4 [01:02<00:22, 22.52s/it]  PCA + kNN: 100%|██████████| 4/4 [02:04<00:00, 38.18s/it]  PCA + kNN: 100%|██████████| 4/4 [02:04<00:00, 31.12s/it]
+
+  Components   Accuracy   Time (s)   Var Explained  
+  5            0.7359     14.7       0.6161         
+  50           0.8638     18.3       0.8627         
+  150          0.8708     29.3       0.9375         
+  784          0.8615     62.2       1.0000         
+  Saved: task3_accuracy_vs_components.png
+  Saved: task3_runtime_vs_accuracy.png
+
+Task 3 complete!

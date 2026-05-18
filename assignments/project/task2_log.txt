@@ -1,0 +1,46 @@
+warning: The workspace `requires-python` value (`==3.12`) contains an exact match without a patch version. When omitted, the patch version is implicitly `0` (e.g., `==3.12.0`). Did you mean `==3.12.*`?
+
+======================================================================
+TASK 2: kNN BENCHMARK (5-fold CV)
+======================================================================
+  Testing 28 hyperparameter combinations (5-fold CV)...
+  Parallelizing with 8 workers...
+  kNN CV:   0%|          | 0/28 [00:00<?, ?combo/s]  kNN CV:  29%|██▊       | 8/28 [00:00<00:00, 20.60combo/s]  kNN CV:  29%|██▊       | 8/28 [00:20<00:00, 20.60combo/s]  kNN CV:  57%|█████▋    | 16/28 [04:30<03:58, 19.87s/combo]  kNN CV:  86%|████████▌ | 24/28 [36:22<07:59, 119.91s/combo]  kNN CV: 100%|██████████| 28/28 [36:22<00:00, 77.93s/combo] 
+
+  Best CV Accuracy: 0.8625
+  Best Params: k=5, metric=manhattan, weights=distance
+
+  Top 10 CV Results:
+    k metric       weights    mean_acc   std_acc   
+    5 manhattan    distance   0.8625     0.0033    
+    7 manhattan    distance   0.8619     0.0028    
+    9 manhattan    distance   0.8616     0.0030    
+    3 manhattan    distance   0.8614     0.0033    
+    5 manhattan    uniform    0.8610     0.0034    
+    7 manhattan    uniform    0.8604     0.0029    
+    9 manhattan    uniform    0.8601     0.0036    
+    3 manhattan    uniform    0.8594     0.0035    
+    5 euclidean    distance   0.8566     0.0037    
+   15 manhattan    distance   0.8565     0.0026    
+
+  kNN Test Results:
+    Accuracy:  0.8615
+    Precision: 0.8627
+    Recall:    0.8615
+    Fit time:  0.05s
+    Pred time: 61.35s
+  Saved: task2_knn_confusion_matrix.png
+
+  Per-class accuracy:
+    T-shirt/top    : 0.8480
+    Trouser        : 0.9700
+    Pullover       : 0.7900
+    Dress          : 0.8790
+    Coat           : 0.7580
+    Sandal         : 0.8970
+    Shirt          : 0.5920
+    Sneaker        : 0.9550
+    Bag            : 0.9550
+    Ankle boot     : 0.9710
+
+Task 2 complete! Results saved to results_task2.pkl

@@ -1,0 +1,26 @@
+warning: The workspace `requires-python` value (`==3.12`) contains an exact match without a patch version. When omitted, the patch version is implicitly `0` (e.g., `==3.12.0`). Did you mean `==3.12.*`?
+
+======================================================================
+TASK 5: COMPARATIVE ANALYSIS
+======================================================================
+
+  Metric          kNN             Dense NN       
+  ---------------------------------------------
+  Accuracy        0.8615          0.9010         
+  Precision       0.8627          0.9009         
+  Recall          0.8615          0.9010         
+  Saved: task5_comparison.png
+  Saved: task5_per_class_comparison.png
+
+  Winner: Neural Network
+
+  Discussion:
+    - NN learns hierarchical feature representations suitable for image data
+    - kNN relies on raw pixel distances which struggle with translation/rotation
+    - Shirt vs T-shirt/Pullover/Coat confusion is common (visually similar)
+
+  Improvement suggestion:
+    - Use Convolutional Neural Network (CNN) to exploit spatial structure
+    - Data augmentation (random crops, flips) to improve generalization
+
+Task 5 complete!

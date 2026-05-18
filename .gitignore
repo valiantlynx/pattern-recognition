@@ -18,3 +18,4 @@ wheels/
 *.toc
 *.bak
 *.bak*
+*.dvi
